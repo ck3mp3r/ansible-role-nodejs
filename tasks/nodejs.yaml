@@ -1,0 +1,24 @@
+---
+- name: Check if nvm is installed.
+  stat:
+    path: ~{{ user }}/.nvm
+  register: nvm_installed
+
+- name: Load nvm installer data
+  block:
+    - uri:
+        url: https://raw.githubusercontent.com/nvm-sh/nvm/{{ nvm_version }}/install.sh
+        return_content: yes
+      register: nvm_installer
+    - command:
+        argv:
+          - "bash"
+          - "-c"
+          - "{{ nvm_installer.content }}"
+    - shell: |
+        source ~{{ user }}/.nvm/nvm.sh
+        nvm install {{ node_version }}
+        nvm use node
+      args:
+        executable: /bin/bash
+  when: nvm_installed.stat.exists == False

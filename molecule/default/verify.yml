@@ -1,0 +1,27 @@
+---
+# This is an example playbook to execute Ansible tests.
+
+- name: Verify
+  hosts: all
+  vars:
+    user: root
+    nvm_version: 'v0.39.1'
+    node_version: 'v16.13.2'
+  tasks:
+  - name: Stat ~{{ user }}/.nvm/nvm-exec
+    stat:
+      path: ~{{ user }}/.nvm/nvm-exec
+    register: nvm_exists
+
+  - name: Assert ~{{ user }}/.nvm/nvm-exec
+    assert:
+      that: nvm_exists.stat.exists
+
+  - name: Stat ~{{ user }}/.nvm/versions/node/{{ node_version }}/bin/node
+    stat:
+      path: ~{{ user }}/.nvm/versions/node/{{ node_version }}/bin/node
+    register: node_exists
+
+  - name: Assert ~{{ user }}/.nvm/versions/node/{{ node_version }}/bin/node exists
+    assert:
+      that: node_exists.stat.exists
