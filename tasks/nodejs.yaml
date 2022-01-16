@@ -6,16 +6,19 @@
 
 - name: Load nvm installer data
   block:
-    - uri:
+    - name: load nvm installer
+      uri:
         url: https://raw.githubusercontent.com/nvm-sh/nvm/{{ nvm_version }}/install.sh
         return_content: yes
       register: nvm_installer
-    - command:
+    - name: run nvm installer
+      command:
         argv:
           - "bash"
           - "-c"
           - "{{ nvm_installer.content }}"
-    - shell: |
+    - name: run nvm node installation
+      shell: |
         source ~{{ user }}/.nvm/nvm.sh
         nvm install {{ node_version }}
         nvm use node
