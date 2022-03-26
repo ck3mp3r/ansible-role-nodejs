@@ -9,7 +9,7 @@
     url: https://raw.githubusercontent.com/nvm-sh/nvm/{{ nvm_version }}/install.sh
     return_content: yes
   register: nvm_installer
-  when: nvm_installed.stat.exists == False
+  when: not nvm_installed.stat.exists
 
 - name: run nvm installer
   command:
@@ -17,7 +17,7 @@
       - "bash"
       - "-c"
       - "{{ nvm_installer.content }}"
-  when: nvm_installed.stat.exists == False
+  when: not nvm_installed.stat.exists
 
 - name: run nvm node installation
   shell: |
@@ -26,4 +26,4 @@
     nvm use node
   args:
     executable: /bin/bash
-  when: nvm_installed.stat.exists == False
+  when: not nvm_installed.stat.exists
