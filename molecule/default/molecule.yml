@@ -9,7 +9,7 @@ lint: |
   ansible-lint
 platforms:
   - name: Debian
-    image: debian:9
+    image: debian:11
 provisioner:
   name: ansible
 verifier:
