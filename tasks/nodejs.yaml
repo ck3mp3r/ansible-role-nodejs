@@ -4,24 +4,26 @@
     path: ~{{ user }}/.config/nvm
   register: nvm_installed
 
-- name: Load nvm installer data
-  block:
-    - name: load nvm installer
-      uri:
-        url: https://raw.githubusercontent.com/nvm-sh/nvm/{{ nvm_version }}/install.sh
-        return_content: yes
-      register: nvm_installer
-    - name: run nvm installer
-      command:
-        argv:
-          - "bash"
-          - "-c"
-          - "{{ nvm_installer.content }}"
-    - name: run nvm node installation
-      shell: |
-        source ~{{ user }}/.config/nvm/nvm.sh
-        nvm install {{ node_version }}
-        nvm use node
-      args:
-        executable: /bin/bash
+- name: load nvm installer
+  uri:
+    url: https://raw.githubusercontent.com/nvm-sh/nvm/{{ nvm_version }}/install.sh
+    return_content: yes
+  register: nvm_installer
+  when: nvm_installed.stat.exists == False
+
+- name: run nvm installer
+  command:
+    argv:
+      - "bash"
+      - "-c"
+      - "{{ nvm_installer.content }}"
+  when: nvm_installed.stat.exists == False
+
+- name: run nvm node installation
+  shell: |
+    source ~{{ user }}/.config/nvm/nvm.sh
+    nvm install {{ node_version }}
+    nvm use node
+  args:
+    executable: /bin/bash
   when: nvm_installed.stat.exists == False
