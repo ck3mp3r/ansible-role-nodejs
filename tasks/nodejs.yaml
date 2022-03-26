@@ -1,7 +1,7 @@
 ---
 - name: Check if nvm is installed.
   stat:
-    path: ~{{ user }}/.nvm
+    path: ~{{ user }}/.config/nvm
   register: nvm_installed
 
 - name: Load nvm installer data
@@ -19,7 +19,7 @@
           - "{{ nvm_installer.content }}"
     - name: run nvm node installation
       shell: |
-        source ~{{ user }}/.nvm/nvm.sh
+        source ~{{ user }}/.config/nvm/nvm.sh
         nvm install {{ node_version }}
         nvm use node
       args:
