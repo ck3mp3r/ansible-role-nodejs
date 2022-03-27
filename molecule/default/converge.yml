@@ -2,10 +2,10 @@
 - name: Converge
   hosts: all
   environment:
-    XDG_CONFIG_HOME: ~{ user }/.config
-    XDG_CACHE_HOME: ~{ user }/.cache
-    XDG_DATA_HOME: ~{ user }/.local/share
-    ZDOTDIR: ~{ user }/.config/zsh
+    XDG_CONFIG_HOME: /root/.config
+    XDG_CACHE_HOME: /root/.cache
+    XDG_DATA_HOME: /root/.local/share
+    ZDOTDIR: /root/.config/zsh
 
   tasks:
     - name: print out os family
