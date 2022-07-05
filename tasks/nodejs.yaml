@@ -1,7 +1,7 @@
 ---
 - name: Check if nvm is installed.
   stat:
-    path: ~{{ user }}/.config/nvm
+    path: ~/.config/nvm
   register: nvm_installed
 
 - name: load nvm installer
@@ -19,9 +19,14 @@
       - "{{ nvm_installer.content }}"
   when: not nvm_installed.stat.exists
 
+- name: Ensure ZSH config for nvm is loaded
+  copy:
+    src: files/config/zsh/zshrc.d/nvm.zsh
+    dest: ~/.config/zsh/zshrc.d/nvm.zsh
+
 - name: run nvm node installation
   shell: |
-    source ~{{ user }}/.config/nvm/nvm.sh
+    source ~/.config/nvm/nvm.sh
     nvm install {{ node_version }}
     nvm use node
   args:
